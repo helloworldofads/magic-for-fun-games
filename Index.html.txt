@@ -71,3 +71,60 @@ margin-top: 0.5rem;
 </div>
 </body>
 </html>
+<!-- Add this inside your <body> tag, maybe after the cards -->
+
+<div id="cart-container" style="position: fixed; top: 1rem; right: 1rem; background: #330000; color: white; padding: 1rem; border-radius: 8px; width: 300px; max-height: 400px; overflow-y: auto;">
+  <h3>Your Cart</h3>
+  <ul id="cart-items" style="list-style:none; padding:0; margin:0;"></ul>
+  <p><strong>Total: $<span id="cart-total">0</span></strong></p>
+  <button onclick="clearCart()" style="background:red; color:white; border:none; padding:0.5rem 1rem; border-radius:4px;">Clear Cart</button>
+</div>
+
+<script>
+  const cart = [];
+
+  function addToCart(name, price) {
+    const itemIndex = cart.findIndex(item => item.name === name);
+    if (itemIndex > -1) {
+      cart[itemIndex].quantity++;
+    } else {
+      cart.push({name, price, quantity: 1});
+    }
+    renderCart();
+  }
+
+  function removeFromCart(name) {
+    const itemIndex = cart.findIndex(item => item.name === name);
+    if (itemIndex > -1) {
+      cart.splice(itemIndex, 1);
+    }
+    renderCart();
+  }
+
+  function clearCart() {
+    cart.length = 0;
+    renderCart();
+  }
+
+  function renderCart() {
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    cartItems.innerHTML = '';
+    let total = 0;
+    cart.forEach(item => {
+      total += item.price * item.quantity;
+      const li = document.createElement('li');
+      li.style.marginBottom = '0.5rem';
+      li.innerHTML = `
+        ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)} 
+        <button onclick="removeFromCart('${item.name}')" style="margin-left:10px; background:#900; color:#fff; border:none; padding:0 5px; border-radius:3px;">X</button>
+      `;
+      cartItems.appendChild(li);
+    });
+    cartTotal.textContent = total.toFixed(2);
+  }
+
+  // Example: Add event to your card's button
+  // You'll need to add a button inside your card like below:
+  // <button onclick="addToCart('Number :)', 537)">Add to Cart</button>
+</script>
