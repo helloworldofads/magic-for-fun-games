@@ -26,6 +26,7 @@ justify-content: center;
 gap: 2rem;
 padding: 2rem;
 }
+<button onclick="addToCart('Number :)', 537)" style="margin-top: 1rem; padding: 0.5rem 1rem; background: gold; border: none; border-radius: 5px; cursor: pointer;">Add to Cart</button>
 .card {
 background-color: #330000;
 border: 3px solid red;
