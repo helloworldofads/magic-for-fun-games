@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Magic for Fun Games</title>
+<style>
+body {
+  background: #1a1a1a;
+  color: #fff;
+  font-family: 'Georgia', serif;
+  margin: 0;
+  padding: 0;
+}
+header {
+  background-color: #720000;
+  padding: 1rem;
+  text-align: center;
+  font-size: 2rem;
+  color: gold;
+}
+.store-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+.card {
+  background-color: #330000;
+  border: 3px solid red;
+  border-radius: 12px;
+  width: 250px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 0 10px red;
+}
+.card img {
+  width: 100px;
+  height: 100px;
+}
+.card h2 {
+  color: #ff5555;
+  margin-bottom: 0.5rem;
+}
+.rarity {
+  color: cyan;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+.price {
+  color: gold;
+  font-size: 1.2rem;
+}
+.description {
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+</style>
+</head>
+<body>
+<header>Magic for Fun Games</header>
+<div class="store-container">
+  <div class="card">
+    <img src="https://emojiapi.dev/api/v1/smiling_face/128.png" alt="Number :)" />
+    <h2>Number :)</h2>
+    <div class="rarity">Hacker Rarity - Red</div>
+    <div class="price">$537</div>
+    <p class="description">A smile that can use its mouth to shoot a radioactive laser.</p>
+    <button onclick="addToCart('Number :)', 537)" style="margin-top: 1rem; padding: 0.5rem 1rem; background: gold; border: none; border-radius: 5px; cursor: pointer;">Add to Cart</button>
+  </div>
+</div>
+
+<div id="cart-container" style="position: fixed; top: 1rem; right: 1rem; background: #330000; color: white; padding: 1rem; border-radius: 8px; width: 300px; max-height: 400px; overflow-y: auto;">
+  <h3>Your Cart</h3>
+  <ul id="cart-items" style="list-style:none; padding:0; margin:0;"></ul>
+  <p><strong>Total: $<span id="cart-total">0</span></strong></p>
+  <button onclick="clearCart()" style="background:red; color:white; border:none; padding:0.5rem 1rem; border-radius:4px;">Clear Cart</button>
+</div>
+
+<script>
+  const cart = [];
+
+  function addToCart(name, price) {
+    const itemIndex = cart.findIndex(item => item.name === name);
+    if (itemIndex > -1) {
+      cart[itemIndex].quantity++;
+    } else {
+      cart.push({name, price, quantity: 1});
+    }
+    renderCart();
+  }
+
+  function removeFromCart(name) {
+    const itemIndex = cart.findIndex(item => item.name === name);
+    if (itemIndex > -1) {
+      cart.splice(itemIndex, 1);
+    }
+    renderCart();
+  }
+
+  function clearCart() {
+    cart.length = 0;
+    renderCart();
+  }
+
+  function renderCart() {
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    cartItems.innerHTML = '';
+    let total = 0;
+    cart.forEach(item => {
+      total += item.price * item.quantity;
+      const li = document.createElement('li');
+      li.style.marginBottom = '0.5rem';
+      li.innerHTML = `
+        ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)} 
+        <button onclick="removeFromCart('${item.name}')" style="margin-left:10px; background:#900; color:#fff; border:none; padding:0 5px; border-radius:3px;">X</button>
+      `;
+      cartItems.appendChild(li);
+    });
+    cartTotal.textContent = total.toFixed(2);
+  }
+</script>
+</body>
+</html>
